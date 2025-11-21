@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods: "*"
+
+JWT_SECRET: c2VuaGEta2V5LWp1YW4tMjU2LWJpdHMtY2hhdmVELXNlZ3VyYQ==
+
