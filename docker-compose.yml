@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    container_name: mod2_db_juan
+    environment:
+      POSTGRES_DB: mod2_juan_login
+      POSTGRES_USER: mod2_juan
+      POSTGRES_PASSWORD: mod2_juan_pwd
+    ports:
+      - "5434:5432"
+    networks:
+      - mod2-net
+
+  login-service:
+    build: ./login
+    container_name: mod2_login_juan
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mod2_juan_login
+      SPRING_DATASOURCE_USERNAME: mod2_juan
+      SPRING_DATASOURCE_PASSWORD: mod2_juan_pwd
+      JWT_SECRET: c2VuaGEta2V5LWp1YW4tMjU2LWJpdHMtY2hhdmVELXNlZ3VyYQ==
+      JWT_EXPIRATION_MS: 3600000
+    networks:
+      - mod2-net
+
+  api-gateway:
+    build: ./gateway
+    container_name: mod2_gateway_juan
+    depends_on:
+      - login-service
+    ports:
+      - "8080:8080"
+    networks:
+      - mod2-net
+
+networks:
+  mod2-net:
+    driver: bridge
